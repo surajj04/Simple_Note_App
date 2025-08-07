@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Action Successful - Notes App</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts: Inconsolata -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+          font-family: "Inconsolata", monospace;
+          font-weight: 600;
+        }
+
+        body {
+          background-color: #f8f9fa;
+        }
+
+        .note-card {
+          box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+          border-radius: 0;
+          border: 1px solid #dee2e6;
+        }
+
+        .action-icon {
+          font-size: 1.5rem;
+          margin-right: 0.5rem;
+          vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">NotesApp</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Add Note</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/show-notes">My Notes</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- Dynamic Success Alert -->
+            <div class="alert alert-success text-center" role="alert">
+                {% if action == 'add' %}
+                    <span class="action-icon">✅</span> <strong>Note added successfully!</strong>
+                {% elif action == 'update' %}
+                    <span class="action-icon">✏️</span> <strong>Note updated successfully!</strong>
+                {% elif action == 'delete' %}
+                    <span class="action-icon">🗑️</span> <strong>Note deleted successfully!</strong>
+                {% else %}
+                    <span class="action-icon">✅</span> <strong>Action completed successfully!</strong>
+                {% endif %}
+            </div>
+
+            <!-- Card with Note Details (only shown for add/update) -->
+            {% if action != 'delete' %}
+            <div class="card note-card mb-4">
+                <div class="card-body">
+                    {% if note.important %}
+                        <span class="badge bg-danger mb-2">Important</span>
+                    {% endif %}
+
+                    <h3 class="card-title">{{ note.title | e }}</h3>
+
+                    {% if note.category %}
+                    <h6 class="card-subtitle mb-2 text-muted">Category: {{ note.category | capitalize }}</h6>
+                    {% endif %}
+
+                    <p class="mt-3">{{ note.content | e }}</p>
+
+                    {% if note.tags %}
+                    <p>
+                        <small class="text-muted">
+                            Tags: {{ note.tags | join(", ") }}
+                        </small>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-center gap-3">
+                {% if action == 'delete' %}
+                    <a href="/show-notes" class="btn btn-dark">📋 View All Notes</a>
+                    <a href="/" class="btn btn-outline-dark">➕ Add New Note</a>
+                {% else %}
+                    <a href="/show-notes" class="btn btn-dark">
+                        {% if action == 'add' %}➕ Add Another Note{% else %}✏️ Edit Another Note{% endif %}
+                    </a>
+                    <a href="/show-notes" class="btn btn-outline-dark">📋 View All Notes</a>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
